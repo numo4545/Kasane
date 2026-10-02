@@ -4,8 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>かさね撮り</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#F1F4F0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1B2029" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<link rel="stylesheet" crossorigin="anonymous" href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
 <style>
 :root{
   /* 作画用紙・フレーム線の水色・鉛筆・青鉛筆・赤鉛筆 */
@@ -813,6 +818,15 @@ window.addEventListener('resize',layout);
 window.addEventListener('orientationchange',function(){setTimeout(layout,250)});
 if(window.ResizeObserver)new ResizeObserver(layout).observe(shell);
 layout();
+
+/* 独立したhttpsサイトとして開かれているときだけ、オフライン用の保存係(サービスワーカー)を登録する */
+try{
+  if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')&&window.top===window.self){
+    window.addEventListener('load',function(){
+      navigator.serviceWorker.register('sw.js').catch(function(){});
+    });
+  }
+}catch(e){}
 })();
 </script>
 </body>
